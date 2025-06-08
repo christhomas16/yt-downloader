@@ -22,8 +22,9 @@ def download():
 
     try:
         ydl_opts = {
-            'outtmpl': os.path.join(app.config['DOWNLOAD_FOLDER'], '%(title)s.%(ext)s'),
-            'format': 'best'
+            'outtmpl': os.path.join(app.config['DOWNLOAD_FOLDER'], '%(title)s.mp4'),
+            'format': 'bestvideo+bestaudio/best',
+            'merge_output_format': 'mp4',
         }
         with YoutubeDL(ydl_opts) as ydl:
             logging.info("Starting download with yt-dlp...")
@@ -60,8 +61,9 @@ def download_reddit():
 
     try:
         ydl_opts = {
-            'outtmpl': os.path.join(app.config['DOWNLOAD_FOLDER'], '%(title)s.%(ext)s'),
-            'format': 'best'
+            'outtmpl': os.path.join(app.config['DOWNLOAD_FOLDER'], '%(title)s.mp4'),
+            'format': 'bestvideo+bestaudio/best',
+            'merge_output_format': 'mp4',
         }
         with YoutubeDL(ydl_opts) as ydl:
             logging.info("Starting Reddit download with yt-dlp...")
