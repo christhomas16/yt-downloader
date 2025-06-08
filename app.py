@@ -50,6 +50,40 @@ def download():
         logging.error(f"An error occurred during download: {e}", exc_info=True)
         return jsonify({'error': str(e)}), 500
 
+@app.route('/download_reddit', methods=['POST'])
+def download_reddit():
+    url = request.json.get('url')
+    logging.info(f"Received Reddit download request for URL: {url}")
+    if not url:
+        logging.error("URL is required but not provided for Reddit download.")
+        return jsonify({'error': 'URL is required'}), 400
+
+    try:
+        ydl_opts = {
+            'outtmpl': os.path.join(app.config['DOWNLOAD_FOLDER'], '%(title)s.%(ext)s'),
+            'format': 'best'
+        }
+        with YoutubeDL(ydl_opts) as ydl:
+            logging.info("Starting Reddit download with yt-dlp...")
+            info_dict = ydl.extract_info(url, download=True)
+            
+            # The structure for Reddit videos might be simpler
+            filepath = info_dict.get('filepath') or info_dict.get('_filename')
+            
+            if not filepath:
+                logging.warning("Could not determine final filepath from yt-dlp info. Falling back to constructing filename.")
+                video_title = info_dict.get('title', 'Unknown Reddit Video')
+                video_ext = info_dict.get('ext', 'mp4')
+                filename = f"{video_title}.{video_ext}"
+            else:
+                filename = os.path.basename(filepath)
+
+            logging.info(f"Reddit download finished. Filename: {filename}")
+            return jsonify({'message': 'Download successful', 'filename': filename})
+    except Exception as e:
+        logging.error(f"An error occurred during Reddit download: {e}", exc_info=True)
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/downloads/<path:filename>')
 def serve_file(filename):
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)

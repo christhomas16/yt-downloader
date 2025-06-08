@@ -3,15 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Video Downloader</title>
+    <title>Video Downloader</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>YouTube Video Downloader</h1>
-        <input type="text" id="youtube-url" placeholder="Enter YouTube video URL">
-        <button id="download-btn">Download</button>
-        <p id="message"></p>
+        <div class="tabs">
+            <button class="tab-button active" data-tab="youtube">YouTube</button>
+            <button class="tab-button" data-tab="reddit">Reddit</button>
+        </div>
+
+        <div id="youtube" class="tab-content active">
+            <h1>YouTube Video Downloader</h1>
+            <input type="text" id="youtube-url" placeholder="Enter YouTube video URL">
+            <button id="youtube-download-btn">Download</button>
+            <p id="youtube-message"></p>
+        </div>
+
+        <div id="reddit" class="tab-content">
+            <h1>Reddit Video Downloader</h1>
+            <input type="text" id="reddit-url" placeholder="Enter Reddit video URL">
+            <button id="reddit-download-btn">Download</button>
+            <p id="reddit-message"></p>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
