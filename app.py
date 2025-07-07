@@ -86,6 +86,41 @@ def download_reddit():
         logging.error(f"An error occurred during Reddit download: {e}", exc_info=True)
         return jsonify({'error': str(e)}), 500
 
+@app.route('/download_x', methods=['POST'])
+def download_x():
+    url = request.json.get('url')
+    logging.info(f"Received X (Twitter) download request for URL: {url}")
+    if not url:
+        logging.error("URL is required but not provided for X download.")
+        return jsonify({'error': 'URL is required'}), 400
+
+    try:
+        ydl_opts = {
+            'outtmpl': os.path.join(app.config['DOWNLOAD_FOLDER'], '%(title)s.mp4'),
+            'format': 'bestvideo+bestaudio/best',
+            'merge_output_format': 'mp4',
+        }
+        with YoutubeDL(ydl_opts) as ydl:
+            logging.info("Starting X (Twitter) download with yt-dlp...")
+            info_dict = ydl.extract_info(url, download=True)
+            
+            # The structure for X videos might be simpler
+            filepath = info_dict.get('filepath') or info_dict.get('_filename')
+            
+            if not filepath:
+                logging.warning("Could not determine final filepath from yt-dlp info. Falling back to constructing filename.")
+                video_title = info_dict.get('title', 'Unknown X Video')
+                video_ext = info_dict.get('ext', 'mp4')
+                filename = f"{video_title}.{video_ext}"
+            else:
+                filename = os.path.basename(filepath)
+
+            logging.info(f"X (Twitter) download finished. Filename: {filename}")
+            return jsonify({'message': 'Download successful', 'filename': filename})
+    except Exception as e:
+        logging.error(f"An error occurred during X (Twitter) download: {e}", exc_info=True)
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/downloads/<path:filename>')
 def serve_file(filename):
     return send_from_directory(app.config['DOWNLOAD_FOLDER'], filename, as_attachment=True)

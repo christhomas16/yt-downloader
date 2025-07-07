@@ -28,6 +28,14 @@ document.addEventListener('DOMContentLoaded', () => {
         handleDownload('/download_reddit', url, message);
     });
 
+    // X (Twitter) Downloader
+    document.getElementById('x-download-btn').addEventListener('click', () => {
+        console.log("X download button clicked.");
+        const url = document.getElementById('x-url').value;
+        const message = document.getElementById('x-message');
+        handleDownload('/download_x', url, message);
+    });
+
     function handleDownload(endpoint, url, messageElement) {
         if (!url) {
             messageElement.textContent = 'Please enter a URL.';
