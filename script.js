@@ -20,23 +20,32 @@ document.addEventListener('DOMContentLoaded', () => {
         handleDownload('/download', url, message);
     });
 
-    // Reddit Downloader
+    // Reddit Downloader (uses unified /download endpoint — yt-dlp auto-detects source)
     document.getElementById('reddit-download-btn').addEventListener('click', () => {
         console.log("Reddit download button clicked.");
         const url = document.getElementById('reddit-url').value;
         const message = document.getElementById('reddit-message');
-        handleDownload('/download_reddit', url, message);
+        handleDownload('/download', url, message);
     });
 
-    // X (Twitter) Downloader
+    // X (Twitter) Downloader (uses unified /download endpoint)
     document.getElementById('x-download-btn').addEventListener('click', () => {
         console.log("X download button clicked.");
         const url = document.getElementById('x-url').value;
         const message = document.getElementById('x-message');
-        handleDownload('/download_x', url, message);
+        handleDownload('/download', url, message);
     });
 
-    function handleDownload(endpoint, url, messageElement) {
+    // Audio Downloader
+    document.getElementById('audio-download-btn').addEventListener('click', () => {
+        console.log("Audio download button clicked.");
+        const url = document.getElementById('audio-url').value;
+        const message = document.getElementById('audio-message');
+        const format = document.querySelector('input[name="audio-format"]:checked').value;
+        handleDownload('/download_audio', url, message, { format });
+    });
+
+    function handleDownload(endpoint, url, messageElement, extraPayload = {}) {
         if (!url) {
             messageElement.textContent = 'Please enter a URL.';
             console.log("URL input is empty.");
@@ -51,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ url: url })
+            body: JSON.stringify({ url: url, ...extraPayload })
         })
         .then(response => {
             console.log("Received response from server.");

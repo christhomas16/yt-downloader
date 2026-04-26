@@ -10,6 +10,7 @@
     <div class="container">
         <div class="tabs">
             <button class="tab-button active" data-tab="youtube">YouTube</button>
+            <button class="tab-button" data-tab="audio">Audio (Music)</button>
             <button class="tab-button" data-tab="reddit">Reddit</button>
             <button class="tab-button" data-tab="x">X (Twitter)</button>
         </div>
@@ -19,6 +20,17 @@
             <input type="text" id="youtube-url" placeholder="Enter YouTube video URL">
             <button id="youtube-download-btn">Download</button>
             <p id="youtube-message"></p>
+        </div>
+
+        <div id="audio" class="tab-content">
+            <h1>Audio Downloader (Music)</h1>
+            <input type="text" id="audio-url" placeholder="Enter YouTube URL">
+            <div class="format-row">
+                <label><input type="radio" name="audio-format" value="native" checked> Native (Opus/m4a — best quality, no re-encode)</label>
+                <label><input type="radio" name="audio-format" value="mp3"> MP3 320kbps (max compatibility)</label>
+            </div>
+            <button id="audio-download-btn">Download Audio</button>
+            <p id="audio-message"></p>
         </div>
 
         <div id="reddit" class="tab-content">

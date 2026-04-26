@@ -1,2 +1,5 @@
-Flask
-yt-dlp 
+Flask>=3.0,<4.0
+# yt-dlp ships frequent breaking changes for YouTube — bump this regularly.
+yt-dlp>=2026.3.17
+# Required by yt-dlp's EmbedThumbnail post-processor for audio downloads.
+mutagen>=1.47.0

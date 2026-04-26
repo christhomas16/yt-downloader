@@ -42,6 +42,12 @@ echo "📥 Installing dependencies..."
 pip install -r requirements.txt
 echo "✅ Dependencies installed"
 
+# Always pull the latest yt-dlp — YouTube ships breaking changes constantly
+# and an outdated yt-dlp is the #1 cause of downloads silently failing.
+echo "🔄 Upgrading yt-dlp to latest..."
+pip install --upgrade yt-dlp
+echo "✅ yt-dlp is up to date ($(yt-dlp --version))"
+
 # Create downloads directory if it doesn't exist
 if [ ! -d "downloads" ]; then
     echo "📁 Creating downloads directory..."
@@ -58,6 +64,7 @@ echo "📍 You can also access it at: http://localhost:8080"
 echo ""
 echo "📋 Features available:"
 echo "   • YouTube video downloads"
+echo "   • YouTube audio downloads (music — native Opus/m4a or MP3 320)"
 echo "   • Reddit video downloads"
 echo "   • X (Twitter) video downloads"
 echo ""

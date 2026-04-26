@@ -79,4 +79,19 @@ button:hover {
 
 .tab-content.active {
     display: block;
+}
+
+.format-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.format-row label {
+    font-size: 0.95em;
+    color: #444;
+    cursor: pointer;
 } 
