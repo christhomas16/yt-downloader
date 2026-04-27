@@ -60,7 +60,15 @@ def download():
     try:
         ydl_opts = {
             **_base_opts(),
-            'format': 'bestvideo*+bestaudio/best',
+            # Prefer H.264 video + AAC audio so files play natively in
+            # QuickTime / Apple ecosystem. Falls back to best-available if
+            # H.264/AAC isn't offered (e.g. some Reddit/X clips).
+            'format': (
+                'bestvideo[vcodec^=avc1]+bestaudio[acodec^=mp4a]/'
+                'bestvideo[vcodec^=avc1]+bestaudio/'
+                'best[vcodec^=avc1]/'
+                'best'
+            ),
             'merge_output_format': 'mp4',
         }
         with YoutubeDL(ydl_opts) as ydl:
