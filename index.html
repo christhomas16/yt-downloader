@@ -3,50 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Downloader</title>
+    <title>Media Downloader</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
+        <header class="app-header">
+            <div class="logo" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M12 3v12"/>
+                    <path d="m7 11 5 5 5-5"/>
+                    <path d="M5 21h14"/>
+                </svg>
+            </div>
+            <div>
+                <h1 class="app-title">Media Downloader</h1>
+                <p class="app-subtitle">YouTube · Reddit · X · audio tools</p>
+            </div>
+        </header>
+
         <div class="tabs">
             <button class="tab-button active" data-tab="youtube">YouTube</button>
-            <button class="tab-button" data-tab="audio">Audio (Music)</button>
+            <button class="tab-button" data-tab="audio">Audio</button>
+            <button class="tab-button" data-tab="extract">Strip Audio</button>
             <button class="tab-button" data-tab="reddit">Reddit</button>
-            <button class="tab-button" data-tab="x">X (Twitter)</button>
+            <button class="tab-button" data-tab="x">X</button>
         </div>
 
         <div id="youtube" class="tab-content active">
-            <h1>YouTube Video Downloader</h1>
-            <input type="text" id="youtube-url" placeholder="Enter YouTube video URL">
-            <button id="youtube-download-btn">Download</button>
-            <p id="youtube-message"></p>
+            <h1>YouTube</h1>
+            <p class="hint">Paste a video link. Downloads prefer H.264 + AAC so files play natively in QuickTime and across Apple devices.</p>
+            <input type="text" id="youtube-url" placeholder="https://youtube.com/watch?v=…">
+            <button class="btn" id="youtube-download-btn">Download video</button>
+            <p class="message" id="youtube-message"></p>
         </div>
 
         <div id="audio" class="tab-content">
-            <h1>Audio Downloader (Music)</h1>
-            <input type="text" id="audio-url" placeholder="Enter YouTube URL">
+            <h1>Audio</h1>
+            <p class="hint">Grab the audio only from a link — keep source quality, or convert to MP3.</p>
+            <input type="text" id="audio-url" placeholder="https://youtube.com/watch?v=…">
             <div class="format-row">
-                <label><input type="radio" name="audio-format" value="native" checked> Native (Opus/m4a — best quality, no re-encode)</label>
-                <label><input type="radio" name="audio-format" value="mp3"> MP3 320kbps (max compatibility)</label>
+                <label class="option">
+                    <input type="radio" name="audio-format" value="native" checked>
+                    <span class="option-body">
+                        <span class="option-title">Native</span>
+                        <span class="option-desc">Opus/m4a — best quality, no re-encode</span>
+                    </span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="audio-format" value="mp3">
+                    <span class="option-body">
+                        <span class="option-title">MP3 320 kbps</span>
+                        <span class="option-desc">Max compatibility (lossy)</span>
+                    </span>
+                </label>
             </div>
-            <button id="audio-download-btn">Download Audio</button>
-            <p id="audio-message"></p>
+            <button class="btn" id="audio-download-btn">Download audio</button>
+            <p class="message" id="audio-message"></p>
+        </div>
+
+        <div id="extract" class="tab-content">
+            <h1>Strip to Audio</h1>
+            <p class="hint">Remove the video stream from a clip you already have, leaving only the audio. Pick something you just downloaded, or upload a video file.</p>
+
+            <label class="field-label" for="extract-file-select">From your downloads</label>
+            <select id="extract-file-select">
+                <option value="">— select a downloaded video —</option>
+            </select>
+
+            <div class="or-divider">or</div>
+
+            <label class="field-label" for="extract-upload">Upload a video</label>
+            <input type="file" id="extract-upload" accept="video/*">
+
+            <div class="format-row">
+                <label class="option">
+                    <input type="radio" name="extract-format" value="native" checked>
+                    <span class="option-body">
+                        <span class="option-title">Native</span>
+                        <span class="option-desc">Copy audio — no re-encode</span>
+                    </span>
+                </label>
+                <label class="option">
+                    <input type="radio" name="extract-format" value="mp3">
+                    <span class="option-body">
+                        <span class="option-title">MP3 320 kbps</span>
+                        <span class="option-desc">Max compatibility (lossy)</span>
+                    </span>
+                </label>
+            </div>
+            <button class="btn" id="extract-btn">Strip to audio</button>
+            <p class="message" id="extract-message"></p>
         </div>
 
         <div id="reddit" class="tab-content">
-            <h1>Reddit Video Downloader</h1>
-            <input type="text" id="reddit-url" placeholder="Enter Reddit video URL">
-            <button id="reddit-download-btn">Download</button>
-            <p id="reddit-message"></p>
+            <h1>Reddit</h1>
+            <p class="hint">Paste a Reddit post or video link.</p>
+            <input type="text" id="reddit-url" placeholder="https://reddit.com/r/…">
+            <button class="btn" id="reddit-download-btn">Download video</button>
+            <p class="message" id="reddit-message"></p>
         </div>
 
         <div id="x" class="tab-content">
-            <h1>X (Twitter) Video Downloader</h1>
-            <input type="text" id="x-url" placeholder="Enter X (Twitter) video URL">
-            <button id="x-download-btn">Download</button>
-            <p id="x-message"></p>
+            <h1>X (Twitter)</h1>
+            <p class="hint">Paste a post link from X.</p>
+            <input type="text" id="x-url" placeholder="https://x.com/…/status/…">
+            <button class="btn" id="x-download-btn">Download video</button>
+            <p class="message" id="x-message"></p>
         </div>
     </div>
     <script src="script.js"></script>
 </body>
-</html> 
+</html>

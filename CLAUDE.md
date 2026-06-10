@@ -12,12 +12,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Single-file Flask backend (`app.py`) + static UI (`index.html` + `script.js` + `style.css`). Downloaded files go to `downloads/` (gitignored).
 
-**Two endpoints, both POST JSON `{"url": "..."}`:**
+**URL-based endpoints, both POST JSON `{"url": "..."}`:**
 
 - `/download` — video. Used by all three UI tabs (YouTube/Reddit/X). yt-dlp auto-detects the source from the URL — there is no per-platform branching, despite what the UI suggests.
 - `/download_audio` — audio-only. Accepts `{"url", "format": "native"|"mp3"}`. Native keeps source codec (Opus/m4a, no re-encode); `mp3` re-encodes to 320kbps.
 
-Both endpoints share `_base_opts()` for yt-dlp config and `_resolve_filename()` for finding the post-processed output path (which is non-trivial — see below).
+Both share `_base_opts()` for yt-dlp config and `_resolve_filename()` for finding the post-processed output path (which is non-trivial — see below).
+
+**Local "strip to audio" capability** (the "Strip to Audio" UI tab) — operates on a file already on disk, no yt-dlp involved, just `ffmpeg`/`ffprobe`:
+
+- `/list_downloads` (GET) — returns video files in `downloads/`, newest first, to populate the tab's dropdown. Filters by `_VIDEO_EXTS`; `os.path.isfile` skips the nested `downloads/downloads` dir.
+- `/extract_audio` (POST) — strips the video stream from a local file. Two input modes: a multipart upload (`file` + `format` form fields) or JSON `{"filename", "format"}` referencing an existing `downloads/` file. `format` is `native` (`ffmpeg -vn -acodec copy`, codec→container via `_AUDIO_EXT_BY_CODEC`, falls back to `.mka`) or `mp3` (re-encode 320k). `_strip_to_audio()` guards against ffmpeg reading and writing the same path (appends `_audio` when source/target collide). `_safe_download_path()` basenames the input + checks `commonpath` to block traversal.
 
 **Static-file serving** is whitelisted to `script.js`/`style.css` only. Don't loosen this — the route used to serve the entire project root, including `app.py`.
 
